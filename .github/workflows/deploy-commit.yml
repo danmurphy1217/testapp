@@ -23,6 +23,9 @@ jobs:
       - name: Setup actions
         uses: actions/checkout@v2
 
+      - name: List action directory contents
+        run: ls -la .github/actions/deploy # Check if action files are present
+
       - name: "Deploy ${{ github.event.inputs.deployment_environment }}"
         uses: ./.github/actions/deploy
         with:
