@@ -23,8 +23,16 @@ jobs:
       - name: Setup actions
         uses: actions/checkout@v2
 
+      - name: List . directory contents
+        run: ls -la . # Check if action files are present
+        continue-on-error: true # Prevents the workflow from failing if the directory doesn't exist
+
+      - name: List .github directory contents
+        run: ls -la .github/ # Check if action files are present
+        continue-on-error: true # Prevents the workflow from failing if the directory doesn't exist
+
       - name: List action directory contents
-        run: ls -la .github/actions/deploy # Check if action files are present
+        run: ls -la .github/actions/ # Check if action files are present
 
       - name: "Deploy ${{ github.event.inputs.deployment_environment }}"
         uses: ./.github/actions/deploy
