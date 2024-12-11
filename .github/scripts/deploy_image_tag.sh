@@ -75,7 +75,7 @@ UpdateFluxTag() {
   sed -i.bak "s/local tag = .*/local tag = '$TAG';/" values.jsonnet
   rm values.jsonnet.bak
   popd
-  render render.yaml -s service-base
+  render render.yaml
 }
 
 GitWorkflowCommitDirectly() {
