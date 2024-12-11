@@ -1,0 +1,33 @@
+name: Deploy commit to environment
+on:
+  workflow_dispatch:
+    inputs:
+      github_sha:
+        type: string
+        description: "The commit sha to deploy"
+        required: true
+      deployment_environment:
+        type: choice
+        description: "The environment to deploy to"
+        required: true
+        options:
+          - "staging"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Setup actions
+        uses: actions/checkout@v2
+
+      - name: "Deploy ${{ github.event.inputs.deployment_environment }}"
+        uses: ./.github/actions/deploy
+        with:
+          commit_directly: false
+          deployment_environment: staging # TODO: use input
+          github_sha: ${{ github.event.inputs.github_sha }}
+          INFRASTRUCTURE_REPOSITORY_USERNAME: danmurphy1217 # using personal username for now
+          INFRASTRUCTURE_REPOSITORY_PERSONAL_ACCESS_TOKEN: ${{ secrets.INFRASTRUCTURE_REPOSITORY_PERSONAL_ACCESS_TOKEN }}
