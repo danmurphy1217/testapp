@@ -146,7 +146,7 @@ if [ -z "$LOCAL_DIR" ]; then
   echo $WORKDIR
   cd $WORKDIR
   git clone $FLUX_REPO_LINK
-  cd flux
+  cd flux-gitops
   UpdateFluxTag
   if [ "$COMMIT_DIRECTLY" = "true" ]; then
     GitWorkflowCommitDirectly
