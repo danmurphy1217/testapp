@@ -39,6 +39,7 @@ runs:
         TAG: ${{ inputs.github_sha }}
         INFRASTRUCTURE_REPOSITORY_USERNAME: ${{ inputs.INFRASTRUCTURE_REPOSITORY_USERNAME }}
         INFRASTRUCTURE_REPOSITORY_PERSONAL_ACCESS_TOKEN: ${{ inputs.INFRASTRUCTURE_REPOSITORY_PERSONAL_ACCESS_TOKEN }}
+
       run: |
         ./.github/scripts/deploy_image_tag.sh \
           -c $COMMIT_DIRECTLY \
