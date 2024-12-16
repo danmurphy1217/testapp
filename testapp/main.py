@@ -34,7 +34,11 @@ def read_root():
             logger.info(row)
             print(row)
 
-    return {"message": "Hello, World! This is working..."}
+    return {"message": "Hello, World!"}
+
+@app.get("/test")
+def test():
+    return {"message": "Hello, Test!"}
 
 @app.get("/redis/cache/{key}")
 def get_redis_item(key: str):
