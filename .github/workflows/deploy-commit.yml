@@ -37,8 +37,8 @@ jobs:
       - name: "Deploy ${{ github.event.inputs.deployment_environment }}"
         uses: ./.github/actions/deploy
         with:
-          commit_directly: false
-          deployment_environment: staging # TODO: use input
+          commit_directly: true
+          deployment_environment: staging
           github_sha: ${{ github.event.inputs.github_sha }}
           INFRASTRUCTURE_REPOSITORY_USERNAME: danmurphy1217 # using personal username for now
           INFRASTRUCTURE_REPOSITORY_PERSONAL_ACCESS_TOKEN: ${{ secrets.INFRASTRUCTURE_REPOSITORY_PERSONAL_ACCESS_TOKEN }}
