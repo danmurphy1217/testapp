@@ -65,5 +65,11 @@ class Redis:
         """
         return int(self.client.incr(self.__key_with_namespace(key), amount=amount))  # type: ignore
 
+    def setex(self, key: str, ttl: int, value: JsonSerializable) -> None:
+        """
+        Redis SETEX with namespaced key.
+        """
+        self.client.setex(self.__key_with_namespace(key), ttl, json.dumps(value))
+
     def __key_with_namespace(self, key: str) -> str:
         return f"{self.namespace.value}:{key}"

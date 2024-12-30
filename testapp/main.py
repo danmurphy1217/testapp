@@ -7,6 +7,7 @@ from contextlib import asynccontextmanager
 
 from testapp.http import HTTP_CLIENTS
 from testapp.redis import Redis, constants
+from testapp.rate_limiter import rate_limit
 
 from testapp.providers.ofac import ofac_client
 
@@ -37,6 +38,7 @@ def read_root():
     return {"message": "Hello, World!"}
 
 @app.get("/test")
+@rate_limit(limit=10, period=30)
 def test():
     return {"message": "Hello, Test!"}
 
