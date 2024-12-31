@@ -15,7 +15,9 @@ def rate_limit(limit: int, period: int):
     """
     def decorator(func: FuncT):
         @wraps(func)
-        async def wrapper(request: Request, *args, **kwargs):
+        async def wrapper(*args, **kwargs):
+            # first argument should be the request
+            request: Request = args[0] # type: ignore
             assert request.client is not None
             client_ip = request.client.host
             key = f"rate_limit:{client_ip}"
@@ -28,11 +30,11 @@ def rate_limit(limit: int, period: int):
                 current_count = 1
             else:
                 current_count = int(current_count) # type: ignore
-                if current_count >= limit: # type: ignore
+                if current_count >= limit:
                     raise HTTPException(status_code=429, detail="Too many requests")
                 # Increment only if we haven't hit the limit
                 current_count = redis_client.incr(key)
 
-            return await func(request, *args, **kwargs)
+            return await func(*args, **kwargs)
         return wrapper
     return decorator
