@@ -16,11 +16,8 @@ def rate_limit(limit: int, period: int):
     def decorator(func: FuncT):
         @wraps(func)
         async def wrapper(*args, **kwargs):
-            # first argument should be the request
-            request: Request = args[0] # type: ignore
-            assert request.client is not None
-            client_ip = request.client.host
-            key = f"rate_limit:{client_ip}"
+            # TODO: use IP address for key
+            key = "rate_limit"
 
             # Get the current count or set to 0 if it doesn't exist
             current_count = redis_client.get(key)
