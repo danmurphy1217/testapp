@@ -1,5 +1,5 @@
 from functools import wraps
-from typing import Callable, TypeVar, Any
+from typing import Callable, TypeVar, Any, cast
 from fastapi import HTTPException, Request
 from testapp.redis import Redis, constants
 
@@ -21,18 +21,16 @@ def rate_limit(limit: int, period: int):
             key = f"rate_limit:{client_ip}"
 
             # Get the current count or set to 0 if it doesn't exist
-            current_count = redis_client.get(key)
-            if current_count is None:
-                # Use setex to atomically set value with expiry
+            current_count: int = cast(int, redis_client.get(key, default=0))
+            if current_count == 0:
+                # atomically set value with expiration
                 redis_client.setex(key, period, 1)
-                current_count = 1
             else:
-                current_count = int(current_count) # type: ignore
-                if current_count >= limit: # type: ignore
+                if current_count >= limit:
                     raise HTTPException(status_code=429, detail="Too many requests")
-                # Increment only if we haven't hit the limit
-                current_count = redis_client.incr(key)
+                # increment the count if we haven't hit the limit
+                redis_client.incr(key)
 
             return await func(request, *args, **kwargs)
         return wrapper
-    return decorator
+    return decorator 
