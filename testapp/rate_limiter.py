@@ -33,6 +33,6 @@ def rate_limit(limit: int, period: int):
                 # Increment only if we haven't hit the limit
                 current_count = redis_client.incr(key)
 
-            return await func(*args, **kwargs)
+            return await func(request, *args, **kwargs)
         return wrapper
     return decorator
