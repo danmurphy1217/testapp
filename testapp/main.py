@@ -1,5 +1,5 @@
 import logging
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 import csv
 from datetime import UTC, datetime
 from contextlib import asynccontextmanager
@@ -39,7 +39,7 @@ def read_root():
 
 @app.get("/test")
 @rate_limit(limit=10, period=30)
-def test():
+def test(request: Request):
     return {"message": "Hello, Test!"}
 
 @app.get("/redis/cache/{key}")
