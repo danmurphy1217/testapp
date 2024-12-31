@@ -39,7 +39,7 @@ def read_root():
 
 @app.get("/test")
 @rate_limit(limit=10, period=30)
-def test(request: Request):
+async def test(request: Request):
     return {"message": "Hello, Test!"}
 
 @app.get("/redis/cache/{key}")
