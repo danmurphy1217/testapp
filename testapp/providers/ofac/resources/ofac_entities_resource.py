@@ -9,7 +9,7 @@ from .base import BaseResource
 class OFACEntitiesResource(BaseResource):
     @property
     def resource(self) -> str:
-        return "/entities?program=CUBA"
+        return "/entities"
 
     async def get_latest_ofac_list(self) -> list[OFACEntity]:
         response = await self.get(self.resource, headers=self.headers)

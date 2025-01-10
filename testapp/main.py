@@ -24,36 +24,12 @@ async def lifespan(app: FastAPI):
         
 app = FastAPI(lifespan=lifespan)
 
-@app.get("/")
-def read_root():
-    logger.info("Hello, World! From KIND")
-
-    with open('/data/ip_lookup.csv', 'r') as file:
-        print(file.readlines())
-        reader = csv.reader(file)
-        for row in reader:
-            logger.info(row)
-            print(row)
-
-    return {"message": "Hello, World!"}
-
-@app.get("/test")
-@rate_limit(limit=10, period=30)
-async def test(request: Request):
-    return {"message": "Hello, Test!"}
-
-@app.get("/redis/cache/{key}")
-def get_redis_item(key: str):
-    logger.info(f"Getting Redis item with key: {key}")
-
-    # Return the value from Redis if it exists
-    if not (val := redis_client.get(key)):
-        val = datetime.now(UTC).isoformat()
-        redis_client.set(key, val)
-
-    return {"value": val}
+@app.get("/health")
+async def health():
+    return {"status": "OK"}
 
 @app.get("/ofac/check")
+@rate_limit(limit=5, period=60)
 async def ofac_check():
     latest_ofac_version = await ofac_client.changes.get_latest_ofac_version()
     latest_ofac_list = await ofac_client.entities.get_latest_ofac_list()
