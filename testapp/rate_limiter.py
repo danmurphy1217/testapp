@@ -33,4 +33,4 @@ def rate_limit(limit: int, period: int):
 
             return await func(request, *args, **kwargs)
         return wrapper
-    return decorator 
+    return decorator
