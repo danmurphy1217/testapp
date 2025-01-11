@@ -1,3 +1,4 @@
+import logging
 from typing import Any
 
 import xmltodict
@@ -5,6 +6,7 @@ import xmltodict
 from ..models import OFACEntity
 from .base import BaseResource
 
+logger = logging.getLogger(__name__)
 
 class OFACEntitiesResource(BaseResource):
     @property
@@ -13,8 +15,14 @@ class OFACEntitiesResource(BaseResource):
 
     async def get_latest_ofac_list(self) -> list[OFACEntity]:
         response = await self.get(self.resource, headers=self.headers)
+        logger.info("received response from OFAC")
+        
         doc = xmltodict.parse(await response.text())
         raw_entities = self.parse_entities(doc["sanctionsData"]["entities"]["entity"])
+        
+        logger.info("parsed OFAC entities", extra={
+            "count": len(raw_entities)
+        })
         return [OFACEntity.model_validate(entity) for entity in raw_entities]
 
     @staticmethod
